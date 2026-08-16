@@ -14,7 +14,7 @@ main model (no vision) ──vision_describe_image──▶ vision-for-opencode 
 
 Open opencode and say one sentence:
 
-> 去 <GitHub 地址> 安装 vision-for-opencode 插件,并把服务器配置为 <服务器地址>
+> 去 https://github.com/gwttk/vision-for-opencode 安装 vision-for-opencode 插件,并把服务器配置为 <服务器地址>
 
 The agent reads this README, copies the plugin file, writes the config file, and tells you to restart opencode. After a restart, paste or drag a screenshot into chat — you'll get a note, and the model can call `vision_describe_image` to see it.
 
