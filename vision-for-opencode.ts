@@ -596,3 +596,11 @@ export const VisionForOpencodePlugin: Plugin = async ({ client }, options?: Visi
     },
   }
 }
+
+// opencode's loader requires a V1 default export (an object with `server`);
+// named exports like DEFAULT_SERVER_URL would otherwise fail the legacy
+// loader with "Plugin export is not a function".
+export default {
+  id: "vision-for-opencode",
+  server: VisionForOpencodePlugin,
+}
