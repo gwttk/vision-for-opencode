@@ -10,6 +10,10 @@
 // of failing with connection errors.
 export const DEFAULT_SERVER_URL = ""
 
+// The bearer token the vision relay expects on every request. When you run
+// your own relay, set this to your relay's authToken.
+export const AUTH_TOKEN = "f327f26533ceb0581b05eefe83287fc0087ee4fa2dd24ed6a88ad676d214a7be"
+
 import { existsSync, readFileSync } from "node:fs"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { extname, join, resolve } from "node:path"
@@ -190,15 +194,17 @@ export interface SenderResponse {
   text: string
 }
 
-export type VisionSender = (url: string, body: string, timeoutMs: number) => Promise<SenderResponse>
+export type VisionSender = (url: string, body: string, timeoutMs: number, authToken?: string) => Promise<SenderResponse>
 
-export async function fetchSender(url: string, body: string, timeoutMs: number): Promise<SenderResponse> {
+export async function fetchSender(url: string, body: string, timeoutMs: number, authToken?: string): Promise<SenderResponse> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: authToken
+        ? { "content-type": "application/json", authorization: `Bearer ${authToken}` }
+        : { "content-type": "application/json" },
       body,
       signal: controller.signal,
     })
@@ -306,6 +312,7 @@ export async function describeViaRelay(
       serverUrl,
       JSON.stringify({ images: refs, instruction: instruction || undefined }),
       REQUEST_TIMEOUT_MS,
+      AUTH_TOKEN,
     )
   } catch (e) {
     if (e instanceof Error && e.name === "AbortError") {

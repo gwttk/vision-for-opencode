@@ -61,3 +61,5 @@ ask a specific question via its `instruction` argument.
 ## For the relay owner
 
 The `DEFAULT_SERVER_URL` constant at the top of `vision-for-opencode.ts` is empty in this public copy — **keep it that way**: never commit a real relay address to this repo. If you want to hand a friend a preconfigured file, edit the constant in a private copy and send that one file. The config file still overrides the baked-in address, so friends can re-point the plugin later without a new file.
+
+The plugin also sends a bearer token (`AUTH_TOKEN` at the top of the file) on every request, which the relay requires — requests without it get 403. If you run your own relay, set the file's `AUTH_TOKEN` to your relay's `authToken`.
